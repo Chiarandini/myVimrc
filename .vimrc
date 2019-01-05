@@ -45,23 +45,20 @@ set wrap
 set wildmode =longest,list,full " auto-competition
 set splitbelow splitright
 
-let g:netrw_banner = 1 " Netrw Disable Banner.
 
-let g:calendar_google_calendar = 1
-let g:calendar_google_task = 1"
-"Goyo Settings
-" g:goyo_width = 70%
-" g:goyo_height = 100%
+"get let preferences
+let g:tex_flavor='latex'           " For empty latex file, make sure it defaults to 'tex' type instead of 'plaintex'
+let g:netrw_banner = 1             " Netrw Disable Banner.
+let g:calendar_google_calendar = 1 " sign into Google
+let g:calendar_google_task = 1     " Sign into Google
+let g:goyo_width = 70%
+let g:goyo_height = 100%
 
 
 " turn on spell checking
 map <F6> :setlocal spell! spelllang=en_ca <CR>
 
 
-"get let preferences
-" For empty latex file, make sure it defaults to 'tex' type instead of
-" 'plaintex'
-let g:tex_flavor='latex'
 
 " If you map <CR> in normal mode, it'll interfere with selection of history
 " items in the command-line window and with jumping to error under cursor in
