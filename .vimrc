@@ -46,13 +46,13 @@ set wildmode =longest,list,full " auto-competition
 set splitbelow splitright
 
 
-"get let preferences
-let g:tex_flavor='latex'           " For empty latex file, make sure it defaults to 'tex' type instead of 'plaintex'
+"plugin preferences
+let g:tex_flavor='latex'           " For empty latex file, defaults to 'tex' type instead of 'plaintex'
 let g:netrw_banner = 1             " Netrw Disable Banner.
 let g:calendar_google_calendar = 1 " sign into Google
 let g:calendar_google_task = 1     " Sign into Google
-let g:goyo_width = 70%
-let g:goyo_height = 100%
+let g:goyo_width = 100
+let g:goyo_height = 120
 
 
 " turn on spell checking
