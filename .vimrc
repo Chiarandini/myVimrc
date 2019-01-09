@@ -32,6 +32,7 @@ set shellslash            " when typing directory in Unix, \ becomes /
 set ignorecase            " when searching, case is ignored
 set smartcase             " case sensitive if capital letter is present in the search pattern
 set smartindent           " Will do indent in an appropriate manner when programming (mostly).
+set incsearch             " incrementally search.
 set sw=2                  " set scroll's width. Still don't know what it does
 set autowrite             " auto write when going through files in a buffer (ex. :next)
 set viminfo='1000         " history in your vim info files in your home directory
