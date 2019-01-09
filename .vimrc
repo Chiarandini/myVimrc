@@ -26,10 +26,10 @@ syntax on
 
 " Set preferences
 set number                " the numbers on the side
+set backspace=indent,eol,start " make backspace work like in other text editors (don't like default)
 set relativenumber        " the position of your cursor relative to other lines
 set shellslash            " when typing directory in Unix, \ becomes /
 set ignorecase            " when searching, case is ignored
-set incsearch             " incremental search
 set smartcase             " case sensitive if capital letter is present in the search pattern
 set smartindent           " Will do indent in an appropriate manner when programming (mostly).
 set sw=2                  " set scroll's width. Still don't know what it does
@@ -42,21 +42,23 @@ set guifont=Consolas:h10  " Set GUI font size
 set showmatch             " highlight matching braces
 set spell spelllang=en_ca " set my spell checker automatically on opening
 set wrap
+set splitbelow splitright " default split to right
+set laststatus=2 " Light
 set wildmode =longest,list,full " auto-competition
-set splitbelow splitright
 
-
-"plugin preferences
-let g:tex_flavor='latex'           " For empty latex file, defaults to 'tex' type instead of 'plaintex'
+"plugin [Global Variable] preferences
+let g:tex_flavor='latex'           " empty tex file default to 'tex' type instead of 'plaintex'
 let g:netrw_banner = 1             " Netrw Disable Banner.
 let g:calendar_google_calendar = 1 " sign into Google
 let g:calendar_google_task = 1     " Sign into Google
 let g:goyo_width = 100
 let g:goyo_height = 120
+let g:org_agenda_files=['C:/Users/Chiarandini/Documents/Agenda/agenda.org']
+
 
 
 " turn on spell checking
-map <F6> :setlocal spell! spelllang=en_ca <CR>
+map <F4> :setlocal spell! spelllang=en_ca <CR>
 
 
 
@@ -73,6 +75,8 @@ command! U cd C:/Users/Chiarandini/Documents/University/2018-2019/2nd\ semester/
 command! VIM cd C:\Program Files (x86)\Vim\vim80
 command! Junk cd C:/Users/Chiarandini/Documents/Junk
 command! Directories echo "DOC, MYP, U, VIM, JUNK"
+
+
 " insert mode mappings
 inoremap <C-BS> <Esc>"_dBxi
 inoremap <S-BS> <Esc>"_dbxi
@@ -86,7 +90,6 @@ inoremap <C-=> <C-r>=
 inoremap <C-c> <esc>0vllyo<esc>p0<C-a>A
 " inoremap jk <Esc> "I'll consider this mapping
 
-
 " IMAP functions. IMAP('origText', 'Substitution', 'filetype')
 " call IMAP('TESTINGTESTING', 'itWorks', 'tex')
 
@@ -97,8 +100,6 @@ inoremap <C-c> <esc>0vllyo<esc>p0<C-a>A
 " To quickly edit my .vimrc file (*e*dit my .*v*imrc file
 nnoremap <leader>ev :vsplit $MYVIMRC<cr> <C-w>L
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap J j<C-e>
-nnoremap K k<C-y>
 nnoremap <C-p> 8kzz
 nnoremap <C-n> 8jzz
 nnoremap n nzz
@@ -116,6 +117,11 @@ nnoremap <C-w>>> <C-w>100>
 nnoremap <C-w><< <C-w>100<
 nnoremap Q :NERDTreeToggle<CR>
 
+" For More smove navigation. Experimentally, H L are moving lines up and down. Originally 8[k/j]zz
+nnoremap H ddkP
+nnoremap J j<C-e>
+nnoremap K k<C-y>
+nnoremap L ddp
 " nnoremap ZO :!start . <CR> ZZ
 
 " for split navigation
@@ -174,6 +180,17 @@ onoremap in{ :<c-u>normal! f{vi{<cr>
 "onoremap b /return<cr>
 
 
+"Common typo fixes
+inoreabbrev ofr for
+inoreabbrev tehn then
+inoreabbrev taht that
+inoreabbrev tat that
+inoreabbrev teh the
+inoreabbrev hte the
+inoreabbrev funciton function
+
+
+
 " Don't know where to put this yet. Delete trailing white space when saving.
 augroup EraseWhiteSpace
     autocmd!
@@ -199,21 +216,28 @@ augroup texAutoCmd
     autocmd filetype tex inoremap \Z \mathbb{Z}
     autocmd filetype tex inoremap \N \mathbb{N}
     autocmd filetype tex inoremap \Q \mathbb{Q}
-    autocmd filetype tex inoremap \[ \[<CR><CR>\]<++><esc>0dt\ka<Tab><Tab>
     autocmd filetype tex inoremap <s-Space> <Tab><BS><Space>
+    autocmd filetype tex inoremap \[ \[<CR><CR>\]<++><esc>0dt\ka<Tab><Tab>
     autocmd filetype tex inoremap <C-cr> <enter><enter>\quad\newline<enter>
     autocmd filetype tex inoreabbrev -> \rightarrow
     autocmd filetype tex inoreabbrev -x> \xrightarrow{}<left><left><left><left><left>
     autocmd filetype tex inoreabbrev --> \rightarrow<Space>
     autocmd filetype tex inoreabbrev <-> \leftrightarrow<Space>
     autocmd filetype tex inoreabbrev <-- \leftarrow<Space>
-    autocmd filetype tex imap <leader>o \overline{}
+    autocmd filetype tex inoreabbrev WLOG Without loss of generality
+    autocmd filetype tex inoreabbrev WTS We want to show that
+    autocmd filetype tex inoreabbrev WKT We know that
+    autocmd filetype tex inoreabbrev st such that
+    autocmd filetype tex inoreabbrev bc because
     " autocmd filetype tex imap <leader>t \text{}
 
     " autocmd FileType tex IMAP('++','<Esc>xa \cdots + ', 'tex')
 
     "nnoremps
     autocmd FileType tex nnoremap <F12> :silent! exe '!%:r.pdf'<CR>
+
+    " onoremap
+    autocmd FileType tex onoremap ie :<c-u>normal! ?\\begin{<Enter>j0v/\\end{<Enter>k$<cr>
 
     "vnoremps
     autocmd FileType tex vnoremap <leader>t di\text{}<Esc>hpl
@@ -227,7 +251,13 @@ augroup texAutoCmd
     autocmd FileType tex command! Template cd C:/Users/Chiarandini/MyPrograms/ActiveScripts/latex/ | vs template.tex
 augroup END
 
+augroup orgAutoCmd
+  autocmd!
 
+  "nnoremaps
+    autocmd FileType org nmap H m{
+    autocmd FileType org nmap L m}
+augroup END
 
 " java setup
 augroup JavaAutoCmd
@@ -314,8 +344,8 @@ function! CompileTex()
 
      "compile and move the pdf
       silent! exe '!compile.bat'
-      exe '!start cmd /c mv ' . fnameescape(l:Name) . '.pdf ' . fnameescape(l:curDir)
-      exe '!start cmd /c mv ' . l:Name . '.synctex.gz ' . fnameescape(l:curDir)
+      exe '!start cmd /c mv ' . fnameescape(l:Name) . '.pdf "' . l:curDir . "\""
+      exe '!start cmd /c mv ' . l:Name . '.synctex.gz "' .l:curDir . "\""
 
      "clean directory
      call delete(l:compileDir . '\' . l:Name . '.aux')
@@ -368,10 +398,21 @@ function! s:RunShellCommand(cmdline)
   call setline(2, 'Expanded Form:  ' .expanded_cmdline)
   call setline(3,substitute(getline(2),'.','=','g'))
   execute '$read !'. expanded_cmdline
-  setlocal nomodifiable 0
+  setlocal nomodifiable
 endfunction
 command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
 
+
+let g:lightline = {
+      \ 'colorscheme': 'default',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
 
 " EXPLORE FURTHER! to number every line!
 " :%s/^\=line('.')."\t"/g
