@@ -1,9 +1,9 @@
 "===========================================================================
-"                             _
+"                 _
 "			     (_)
 "		       __   ___ _ __ ___  _ __ ___
 "		       \ \ / / | '_ ` _ \| '__/ __|
-"			\ V /| | | | | | | | | (__
+"   			\ V /| | | | | | | | | (__
 "		       (_)_/ |_|_| |_| |_|_|  \___|
 "
 "============================================================================
@@ -13,7 +13,7 @@
 set nocompatible
 " Don't forget the leader key by default is "\"
 
-" plugins (like the vim-latex suite)
+" plugins (like the vim-latex, surround, Orgmode, YCM, etc.)
 execute pathogen#infect()
 
 colorscheme torte " preferred colour scheme
@@ -21,12 +21,14 @@ filetype plugin on " load the plugins for specific file types
 filetype indent on " automatically indent code
 filetype plugin indent on
 syntax on
-
-
+let mapleader = "\\"
+let maplocalleader = "\\"
 
 " Set preferences
+"------------------------------------------------------------------------------------------------
+
 set number                " the numbers on the side
-set backspace=indent,eol,start " make backspace work like in other text editors (don't like default)
+set backspace=indent,eol,start "make backspace work like in other text editors (don't like default)
 set relativenumber        " the position of your cursor relative to other lines
 set shellslash            " when typing directory in Unix, \ becomes /
 set ignorecase            " when searching, case is ignored
@@ -42,10 +44,14 @@ set fileencoding=utf-8    " encoding used when saving file
 set guifont=Consolas:h10  " Set GUI font size
 set showmatch             " highlight matching braces
 set spell spelllang=en_ca " set my spell checker automatically on opening
-set wrap
+set wrap                  "Automatically make newline when text goes beyond textwidth.
 set splitbelow splitright " default split to right
-set laststatus=2 " Light
+set laststatus=2          " Fixes Light line plugin glitch.
 set wildmode =longest,list,full " auto-competition
+set undofile              " Enable persistent undo so that undo history persists across vim session
+set undodir=~/vimfiles/undo
+set tabstop=4             " Set tab to 4 spaces.
+set shiftwidth=4          " set shift (i.e. >) to 4 spaces
 
 "plugin [Global Variable] preferences
 let g:tex_flavor='latex'           " empty tex file default to 'tex' type instead of 'plaintex'
@@ -57,10 +63,11 @@ let g:goyo_height = 120
 let g:org_agenda_files=['C:/Users/Chiarandini/Documents/Agenda/agenda.org']
 
 
-
-" turn on spell checking
-map <F4> :setlocal spell! spelllang=en_ca <CR>
-
+" Function keys map
+"------------------------------------------------------------------------------------------------
+noremap <F4> :setlocal spell! spelllang=en_ca <CR>
+noremap <F10> :MundoToggle<cr>
+noremap <F9> :NERDTreeToggle<CR>
 
 
 " If you map <CR> in normal mode, it'll interfere with selection of history
@@ -69,27 +76,30 @@ map <F4> :setlocal spell! spelllang=en_ca <CR>
 autocmd CmdwinEnter * nnoremap <CR> <CR>
 autocmd BufReadPost quickfix nnoremap <CR> <CR>
 
-" My commands. First, directories I use often with vim
+" My commands.
+"------------------------------------------------------------------------------------------------
+" First, directories I use often with vim. When I get Command-T, will discard.
 command! DOC cd C:/Users/Chiarandini/Documents
 command! MYP cd C:/Users/Chiarandini/MyPrograms
 command! U cd C:/Users/Chiarandini/Documents/University/2018-2019/2nd\ semester/
 command! VIM cd C:\Program Files (x86)\Vim\vim80
 command! Junk cd C:/Users/Chiarandini/Documents/Junk
 command! Directories echo "DOC, MYP, U, VIM, JUNK"
-
+command!Preview silent! exe ":!brave %<CR>"
 
 " insert mode mappings
+"------------------------------------------------------------------------------------------------
 inoremap <C-BS> <Esc>"_dBxi
 inoremap <S-BS> <Esc>"_dbxi
 inoremap <C-A> <Esc>ggVG
 inoremap <C-v> <Esc>"*pa
-inoremap <C-Del> <C-o>dw
+inoremap <C-Del> <C-o>dW
+inoremap <S-Del> <C-o>dw
 inoremap <C-p>  <nop>
 inoremap <C-=> <C-r>=
 
-" to make a quick list in Vim (till I figure out org-mode)
+" to make a quick list in Vim (till I adjust to org-mode)
 inoremap <C-c> <esc>0vllyo<esc>p0<C-a>A
-" inoremap jk <Esc> "I'll consider this mapping
 
 " IMAP functions. IMAP('origText', 'Substitution', 'filetype')
 " call IMAP('TESTINGTESTING', 'itWorks', 'tex')
@@ -97,12 +107,12 @@ inoremap <C-c> <esc>0vllyo<esc>p0<C-a>A
 
 
 " normal mode mappings
+"------------------------------------------------------------------------------------------------
 "nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<CR>
 " To quickly edit my .vimrc file (*e*dit my .*v*imrc file
 nnoremap <leader>ev :vsplit $MYVIMRC<cr> <C-w>L
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <C-p> 8kzz
-nnoremap <C-n> 8jzz
+nnoremap <C-p> <C-l>
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap <C-a> ggVG
@@ -110,15 +120,14 @@ nnoremap <C-Space> @q
 nnoremap <leader>] ]sz=z1<Enter>
 nnoremap <leader>[ [sz=z1<Enter>
 nnoremap <F11> :!start .<Enter>
-nnoremap <c-z> <c-x>
 nnoremap <leader>go :Goyo<CR>
+nnoremap <c-z> <c-x>
 nnoremap <C-q> <C-a>
 nnoremap <C-w>++ <C-w>100+
 nnoremap <C-w>>> <C-w>100>
 nnoremap <C-w><< <C-w>100<
-nnoremap Q :NERDTreeToggle<CR>
 
-" For More smove navigation. Experimentally, H L are moving lines up and down. Originally 8[k/j]zz
+" For More smooth navigation. Experimentally, H L are moving lines up and down. Originally 8[k/j]zz
 nnoremap H ddkP
 nnoremap J j<C-e>
 nnoremap K k<C-y>
@@ -137,10 +146,13 @@ nnoremap <C-g> gt
 
 " for creating a list
 nnoremap <leader>C i1.<space>
-" I've modified vim/bundle/Tabular/after/plugin/TabularMaps.vim with custom shortcuts.
+" I've modified vim/bundle/Tabular/after/plugin/TabularMaps.vim with custom shortcuts for Latex
+" cae cie (around enviroment), ca$ ci$ (around dollar sign)
 
+nnoremap <silent> <leader>ss :syntax sync fromstart<cr>
 
 " visual mode mappings
+"------------------------------------------------------------------------------------------------
 vnoremap Y "*y
 vnoremap P "*p
 vnoremap "" "*y
@@ -152,18 +164,18 @@ vnoremap <C-r> "ry:%s/<C-r>r//gc<left><left><left>
 vnoremap <C-g> "ry/<C-r>r
 vnoremap <C-f> "ry?<C-r>r
 vnoremap K JVgq
+vnoremap < <gv
+vnoremap > >gv
 
 " BUG BECAUSE OF HOW JUMP IS SETUP C-JUMP TAKES TOO MUCH PRIORITY. ALSO SCREWING WITH C-j FOR
 " SCREEN NAVIGATION!!
 vnoremap <C-j> <Esc>jzzV
 vnoremap <C-k> <Esc>kzzV
 
-" for surround does not work... because vim sourced before plugins
-vnoremap ( S(
-
-" For the Tabularize package, that let's me align text
-vnoremap < <gv
-vnoremap > >gv
+" for surround.
+vmap ( S(
+vmap [ S[
+vmap { S{
 
 
 "I want to map this for visual mode only. Not visual block mode. I can't figure out how. It is also
@@ -173,6 +185,7 @@ vnoremap > >gv
 
 
 " Operator-Pending Mapping (custom movement mappings)
+"------------------------------------------------------------------------------------------------
 "in parenthesis ( cin( HERE )
 onoremap in( :<c-u>normal! f(vi(<cr>
 onoremap in[ :<c-u>normal! f[vi[<cr>
@@ -181,14 +194,20 @@ onoremap in{ :<c-u>normal! f{vi{<cr>
 "onoremap b /return<cr>
 
 
+
+
 "Common typo fixes
+"------------------------------------------------------------------------------------------------
 inoreabbrev ofr for
 inoreabbrev tehn then
 inoreabbrev taht that
 inoreabbrev tat that
 inoreabbrev teh the
 inoreabbrev hte the
+inoreabbrev waht what
 inoreabbrev funciton function
+inoreabbrev ahve have
+inoreabbrev nad and
 
 
 
@@ -202,7 +221,8 @@ augroup END
 " it. For example, FileType attributes will only load once when the right file type is detected.
 
 
-" for tex files:
+"Tex files:
+"------------------------------------------------------------------------------------------------
 " autocmd FileType <.extension> map <this> <that>
 augroup texAutoCmd
     autocmd!
@@ -210,26 +230,22 @@ augroup texAutoCmd
 
     "inoremaps for latex
     autocmd filetype tex inoremap <s-cr> <enter><enter>\item<space>
-    autocmd filetype tex inoremap \F \mathbb{F}
-    autocmd filetype tex inoremap \V \mathbb{V}
-    autocmd filetype tex inoremap \R \mathbb{R}
-    autocmd filetype tex inoremap \C \mathbb{C}
-    autocmd filetype tex inoremap \Z \mathbb{Z}
-    autocmd filetype tex inoremap \N \mathbb{N}
-    autocmd filetype tex inoremap \Q \mathbb{Q}
     autocmd filetype tex inoremap <s-Space> <Tab><BS><Space>
     autocmd filetype tex inoremap \[ \[<CR><CR>\]<++><esc>0dt\ka<Tab><Tab>
     autocmd filetype tex inoremap <C-cr> <enter><enter>\quad\newline<enter>
-    autocmd filetype tex inoreabbrev -> \rightarrow
-    autocmd filetype tex inoreabbrev -x> \xrightarrow{}<left><left><left><left><left>
-    autocmd filetype tex inoreabbrev --> \rightarrow<Space>
-    autocmd filetype tex inoreabbrev <-> \leftrightarrow<Space>
-    autocmd filetype tex inoreabbrev <-- \leftarrow<Space>
+    autocmd filetype tex inoremap -> \rw
+    autocmd filetype tex inoremap \bf \bf{}<++><Esc>F{a
+    autocmd filetype tex inoremap -x> \xrightarrow{}<left><left><left><left><left>
+    autocmd filetype tex inoremap --> \Rw<Space>
+    autocmd filetype tex inoremap <-> \LRw<Space>
+    autocmd filetype tex inoremap <-- \lw<Space>
+"    autocmd filetype tex inoremap || \l| \r|<left><left><left><left>
     autocmd filetype tex inoreabbrev WLOG Without loss of generality
     autocmd filetype tex inoreabbrev WTS We want to show that
     autocmd filetype tex inoreabbrev WKT We know that
     autocmd filetype tex inoreabbrev st such that
     autocmd filetype tex inoreabbrev bc because
+    autocmd filetype tex inoreabbrev sd standard deviation
     " autocmd filetype tex imap <leader>t \text{}
 
     " autocmd FileType tex IMAP('++','<Esc>xa \cdots + ', 'tex')
@@ -237,28 +253,33 @@ augroup texAutoCmd
     "nnoremps
     autocmd FileType tex nnoremap <F12> :silent! exe '!%:r.pdf'<CR>
 
-    " onoremap
-    autocmd FileType tex onoremap ie :<c-u>normal! ?\\begin{<Enter>j0v/\\end{<Enter>k$<cr>
+    "onoremap
+    "autocmd FileType tex onoremap <silent> ie :<C-u>execute "normal! ?\\begin{<CR>j0v/\\end{<CR>k$"
 
     "vnoremps
     autocmd FileType tex vnoremap <leader>t di\text{}<Esc>hpl
-    autocmd FileType tex vnoremap <leader>o di\overline{}j<Esc>pl
+    autocmd FileType tex vnoremap <leader>o di\o{}j<Esc>hpl
     autocmd FileType tex vnoremap <leader>$ di$$<Esc>hpl
     autocmd FileType tex vnoremap <leader>f di\frac{}{}<Esc>?frac<CR><C-j>
-    autocmd FileType tex vnoremap <leader>b di\textbf{}<Esc>hpl
+    autocmd FileType tex vnoremap <leader>b di\bf{}<Esc>hpl
 
     "Compiling
     autocmd FileType tex nnoremap <leader>kk :CompileTex<CR>
+    autocmd FileType tex command! CompileErr cd C:/Users/Chiarandini/MyPrograms/ActiveScripts/latex/tmp/ | vs tmp.log
     autocmd FileType tex command! Template cd C:/Users/Chiarandini/MyPrograms/ActiveScripts/latex/ | vs template.tex
 augroup END
 
+" org-mode files
+"------------------------------------------------------------------------------------------------
 augroup orgAutoCmd
   autocmd!
 
   "nnoremaps
     autocmd FileType org nmap H m{
     autocmd FileType org nmap L m}
-augroup END
+
+    autocmd FileType org nnoremap <leader>pdf :!pandoc expand('%:t') -o %:r.pdf<cr>
+ augroup END
 
 " java setup
 augroup JavaAutoCmd
@@ -269,11 +290,18 @@ augroup JavaAutoCmd
     autocmd FileType java nnoremap <F4> mqggVG='qzz
     autocmd FileType java inoremap <F4> <Esc>mqggVG='qzza
 augroup END
-"let g:ctrlp_mp = '<c-s>'
-"let g:ctrlp_cmd = 'CtrlP'
-" autocmd BufWrite *
+
+" C setup
+augroup CAutoCmd
+    autocmd FileType c vnoremap <C-/> '<0<C-v>'>0I//<esc>
+    autocmd FileType c nnoremap <C-/> '<0<C-v>'>0I//<esc>
+augroup END
 
 
+
+
+" Functions
+"------------------------------------------------------------------------------------------------
 " To increase and decrease the font size. Got the script from:
 " https://vi.stckexchange.com/questions/3093/how-can-i-change-the-font-size-in-gvim#3094
 if has("unix")
@@ -330,8 +358,6 @@ endif
 " For compiling tex documents.
 function! CompileTex()
      exe 'w'
-     normal 2gg
-     normal 0i%
      let l:curDir = expand('%:p:h')
      let l:fileName = expand('%:t')
      let l:Name = expand('%:r')
@@ -339,22 +365,21 @@ function! CompileTex()
 
      " move appropriate files
       exe '!start cmd /c copy  ' fnameescape(l:fileName) . ' ' .  fnameescape(l:compileDir) . '\cur' . fnameescape(l:fileName)
-      exe '!start cmd /c echo ' . l:curDir . ' >'. l:compileDir .'\curDir.txt'
-      exe '!start cmd /c echo ' . l:fileName . ' >' . l:compileDir.'\fileName.txt'
+      silent! exe '!start cmd /c echo ' . l:curDir . ' >'. l:compileDir .'\curDir.txt'
+      silent! exe '!start cmd /c echo ' . l:fileName . ' >' . l:compileDir.'\fileName.txt'
       exe 'cd' fnameescape(l:compileDir)
 
      "compile and move the pdf
       silent! exe '!compile.bat'
-      exe '!start cmd /c mv ' . fnameescape(l:Name) . '.pdf "' . l:curDir . "\""
-      exe '!start cmd /c mv ' . l:Name . '.synctex.gz "' .l:curDir . "\""
+      silent! exe '!start cmd /c mv ' . fnameescape(l:Name) . '.pdf "' . l:curDir . "\""
+      silent! exe '!start cmd /c mv ' . l:Name . '.synctex.gz "' .l:curDir . "\""
 
      "clean directory
-     call delete(l:compileDir . '\' . l:Name . '.aux')
-     call delete(l:compileDir . '\' . l:Name . '.bcf')
+     "call delete(l:compileDir . '\' . l:Name . '.aux')
+     "call delete(l:compileDir . '\' . l:Name . '.bcf')
      call delete(l:compileDir . '\' . 'cur' . l:Name . '.tex')
      call delete(l:compileDir . '\' .  l:Name . '.tex')
-      exe 'cd' l:curDir
-      normal x
+     exe 'cd' l:curDir
 endfunction
 command! -nargs=0 -bar CompileTex call CompileTex()"
 
@@ -402,6 +427,24 @@ function! s:RunShellCommand(cmdline)
   setlocal nomodifiable
 endfunction
 command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+
+
+
+
+"automacitally align "tables" when a pipe character ( '|' ) is present
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
 
 
 let g:lightline = {
